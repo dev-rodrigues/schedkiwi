@@ -9,7 +9,7 @@ import java.util.*
  */
 @Entity
 @Table(name = "application_tokens")
-class ApplicationTokenEntity(
+data class ApplicationTokenEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     val id: UUID = UUID.randomUUID(),
@@ -19,6 +19,9 @@ class ApplicationTokenEntity(
 
     @Column(name = "app_name", nullable = false)
     val appName: String,
+
+    @Column(name = "application_id", nullable = false)
+    val applicationId: UUID,
 
     @Column(columnDefinition = "TEXT")
     val description: String? = null,
@@ -33,7 +36,10 @@ class ApplicationTokenEntity(
     val lastUsedAt: Instant? = null,
 
     @Column(name = "expires_at")
-    val expiresAt: Instant? = null
+    val expiresAt: Instant? = null,
+
+    @Column(name = "created_by", nullable = false)
+    val createdBy: String = "system"
 ) {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "app_name", referencedColumnName = "app_name", insertable = false, updatable = false)
