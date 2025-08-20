@@ -15,6 +15,7 @@ data class ScheduledJob(
     val fixedRate: Long? = null,
     val fixedDelay: Long? = null,
     val timeUnit: String = "MILLISECONDS",
+    val description: String? = null,
     val applicationId: UUID,
     val createdAt: Instant = Instant.now(),
     val executions: MutableList<Execution> = mutableListOf()
