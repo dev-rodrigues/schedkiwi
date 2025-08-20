@@ -34,7 +34,7 @@ Sistema de monitoramento em tempo real de execuções de schedulers com:
   - ✅ Testes unitários completos
   - ✅ Documentação técnica
 
-### **2. API Central `central-telemetry-api/`** 🔄 **70% Concluído**
+### **2. API Central `central-telemetry-api/`** 🔄 **85% Concluído**
 - **Status**: 🔄 Em desenvolvimento ativo
 - **Localização**: Pasta `central-telemetry-api/` na raiz do projeto
 - **Funcionalidades Implementadas**:
@@ -47,7 +47,7 @@ Sistema de monitoramento em tempo real de execuções de schedulers com:
   - ✅ Controllers de telemetria (Grupo 1)
   - ✅ Sistema de autenticação completo
   - ✅ DTOs para frontend
-  - 🔄 Controllers do frontend (Grupo 2)
+  - ✅ Controllers do frontend (Grupo 2)
   - 🔄 Sistema HATEOAS
   - 🔄 Testes e validação
 
@@ -74,10 +74,13 @@ Sistema de monitoramento em tempo real de execuções de schedulers com:
 
 ## 🔄 **Próximos Milestones**
 
-### **Milestone 4: Endpoints do Frontend** 🔄
-- **Prazo**: Em andamento
+### **Milestone 4: Endpoints do Frontend** ✅
+- **Data**: 2024-12-19
 - **Descrição**: Implementação dos endpoints REST para frontend (Grupo 2)
-- **Critérios**: Controllers com HATEOAS e navegação fluida funcionais
+- **Artefatos**: 
+  - FrontendController com 15 endpoints implementados
+  - FrontendQueryService para agregação de dados
+  - Estrutura completa para HATEOAS
 
 ### **Milestone 5: Sistema HATEOAS** 📋
 - **Prazo**: Próximo
@@ -96,16 +99,16 @@ Sistema de monitoramento em tempo real de execuções de schedulers com:
 
 ## 📋 **Tarefas Ativas**
 
-### **Tarefa Atual: Controllers do Frontend**
+### **Tarefa Atual: Sistema HATEOAS**
 - **Status**: 🔄 Em progresso
-- **Descrição**: Implementação dos controllers para endpoints do Grupo 2 (frontend)
-- **Arquivos**: `central-telemetry-api/src/main/kotlin/.../controllers/`
-- **Próximo**: Sistema HATEOAS e navegação fluida
-
-### **Próxima Tarefa: Sistema HATEOAS**
-- **Status**: 📋 Planejada
 - **Descrição**: Implementação do sistema HATEOAS para navegação fluida
 - **Arquivos**: Controllers e DTOs com links de navegação
+- **Próximo**: Testes unitários e validação arquitetural
+
+### **Próxima Tarefa: Testes e Validação**
+- **Status**: 📋 Planejada
+- **Descrição**: Implementação de testes unitários para todas as camadas
+- **Arquivos**: Testes para domain, application e infrastructure layers
 
 ## 🧪 **Testes e Qualidade**
 
