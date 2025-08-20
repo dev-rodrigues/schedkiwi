@@ -34,7 +34,7 @@ Sistema de monitoramento em tempo real de execuções de schedulers com:
   - ✅ Testes unitários completos
   - ✅ Documentação técnica
 
-### **2. API Central `central-telemetry-api/`** 🔄 **30% Concluído**
+### **2. API Central `central-telemetry-api/`** 🔄 **70% Concluído**
 - **Status**: 🔄 Em desenvolvimento ativo
 - **Localização**: Pasta `central-telemetry-api/` na raiz do projeto
 - **Funcionalidades Implementadas**:
@@ -43,9 +43,12 @@ Sistema de monitoramento em tempo real de execuções de schedulers com:
   - ✅ Arquitetura hexagonal (Ports & Adapters)
   - ✅ Entidades de domínio
   - ✅ Repositórios JPA
-  - 🔄 Use cases e serviços
-  - 🔄 Controllers e endpoints
-  - 🔄 Sistema de autenticação
+  - ✅ Use cases e serviços
+  - ✅ Controllers de telemetria (Grupo 1)
+  - ✅ Sistema de autenticação completo
+  - ✅ DTOs para frontend
+  - 🔄 Controllers do frontend (Grupo 2)
+  - 🔄 Sistema HATEOAS
   - 🔄 Testes e validação
 
 ## 🚀 **Milestones Alcançados**
@@ -60,40 +63,49 @@ Sistema de monitoramento em tempo real de execuções de schedulers com:
 - **Descrição**: Estrutura da API Central definida e implementada
 - **Artefatos**: Projeto Spring Boot com arquitetura hexagonal
 
+### **Milestone 3: Sistema de Autenticação** ✅
+- **Data**: 2024-12-19
+- **Descrição**: Sistema completo de autenticação com tokens Bearer implementado
+- **Artefatos**: 
+  - TokenValidationInterceptor para validação automática
+  - TokenValidationService com hash SHA-256
+  - ApplicationToken entity e repository
+  - SecurityConfig para configuração Spring
+
 ## 🔄 **Próximos Milestones**
 
-### **Milestone 3: Endpoints da API** 🔄
+### **Milestone 4: Endpoints do Frontend** 🔄
 - **Prazo**: Em andamento
-- **Descrição**: Implementação dos endpoints REST para recebimento de dados
-- **Critérios**: Todos os 6 endpoints do Grupo 1 funcionais
+- **Descrição**: Implementação dos endpoints REST para frontend (Grupo 2)
+- **Critérios**: Controllers com HATEOAS e navegação fluida funcionais
 
-### **Milestone 4: Sistema de Autenticação** 📋
+### **Milestone 5: Sistema HATEOAS** 📋
 - **Prazo**: Próximo
-- **Descrição**: Implementação do sistema de tokens para aplicações
-- **Critérios**: Validação de tokens e identificação de aplicações
+- **Descrição**: Implementação do sistema HATEOAS para navegação fluida
+- **Critérios**: Links de navegação automáticos em todas as respostas
 
-### **Milestone 5: API Frontend** 📋
+### **Milestone 6: Testes e Validação** 📋
 - **Prazo**: Futuro
-- **Descrição**: Endpoints para consulta e navegação de dados
-- **Critérios**: HATEOAS e navegação fluida implementados
+- **Descrição**: Testes unitários e de integração completos
+- **Critérios**: Cobertura de 80%+ e validação arquitetural
 
-### **Milestone 6: Integração Completa** 📋
+### **Milestone 7: Integração Completa** 📋
 - **Prazo**: Futuro
 - **Descrição**: Validação end-to-end da comunicação biblioteca ↔ API
 - **Critérios**: Fluxo completo funcionando com dados reais
 
 ## 📋 **Tarefas Ativas**
 
-### **Tarefa Atual: Implementação dos Use Cases**
+### **Tarefa Atual: Controllers do Frontend**
 - **Status**: 🔄 Em progresso
-- **Descrição**: Implementação dos casos de uso da camada de aplicação
-- **Arquivos**: `central-telemetry-api/src/main/kotlin/.../usecases/`
-- **Próximo**: Implementação dos controllers
-
-### **Próxima Tarefa: Endpoints REST**
-- **Status**: 📋 Planejada
-- **Descrição**: Implementação dos controllers e endpoints
+- **Descrição**: Implementação dos controllers para endpoints do Grupo 2 (frontend)
 - **Arquivos**: `central-telemetry-api/src/main/kotlin/.../controllers/`
+- **Próximo**: Sistema HATEOAS e navegação fluida
+
+### **Próxima Tarefa: Sistema HATEOAS**
+- **Status**: 📋 Planejada
+- **Descrição**: Implementação do sistema HATEOAS para navegação fluida
+- **Arquivos**: Controllers e DTOs com links de navegação
 
 ## 🧪 **Testes e Qualidade**
 
