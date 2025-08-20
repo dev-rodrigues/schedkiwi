@@ -16,6 +16,12 @@ Manter consistência de arquitetura, código, testes e operações em todos os s
 - Camadas: `domain` → `application` → `infrastructure`.
 - Evitar acoplamento de entidades de domínio com mapeamentos de banco.
 
+## Estrutura do Projeto
+- **Biblioteca**: `scheduler-telemetry/` (pasta na raiz) - Código fonte da biblioteca Maven
+- **API Central**: `central-telemetry-api/` (pasta na raiz) - Código do gerenciador central
+- **Documentação**: `memory-bank/` - Contexto, regras e documentação do projeto
+- **Raiz**: Projeto com duas pastas principais para código fonte
+
 ## Qualidade
 - Lint e format automáticos no pre-commit.
 - Cobertura mínima: 80% em módulos críticos.

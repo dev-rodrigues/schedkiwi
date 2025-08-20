@@ -18,7 +18,7 @@
 
 ## 🔍 Component Analysis
 - **Affected Components:**
-  - **Módulo Maven (scheduler-telemetry)**
+  - **Módulo Maven (scheduler-telemetry)** - Localizado na pasta `scheduler-telemetry/` na raiz do projeto
     - Changes needed: Criação completa do projeto
     - Dependencies: Kotlin, Spring Boot, Spring AOP, Jackson
   

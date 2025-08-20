@@ -6,6 +6,7 @@
 - **Status**: Implementação Principal Concluída (Phases 1-5)
 - **Data de Criação**: 2024-12-19
 - **Data de Conclusão**: 2024-12-19
+- **Localização**: Pasta `scheduler-telemetry/` na raiz do projeto
 
 ## 🎯 **Objetivo**
 Implementar uma biblioteca Maven de telemetria para Spring Boot schedulers usando Kotlin e AOP, com funcionalidades de rastreamento em tempo real, garantia de ordem e comunicação assíncrona com um Gerenciador Central.

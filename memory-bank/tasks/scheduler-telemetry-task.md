@@ -4,11 +4,15 @@ feature
 # Descrição
 Criar uma biblioteca Maven em Kotlin que instrumenta métodos @Scheduled via AOP para coletar telemetria e enviar relatórios ao Gerenciador Central, sem interferir no comportamento dos schedulers existentes.
 
+**Localização**: Pasta `scheduler-telemetry/` na raiz do projeto (código fonte da biblioteca)
+
 # Contexto (arquivos/trechos)
-- Novo módulo Maven: `scheduler-telemetry/`
-- Estrutura de pacotes: `com.schedkiwi.schedulertelemetry`
-- Integração com Spring Boot via auto-configuração
-- Comunicação REST com Gerenciador Central existente
+- **Biblioteca**: `scheduler-telemetry/` (pasta na raiz do projeto)
+  - Novo módulo Maven: `scheduler-telemetry/`
+  - Estrutura de pacotes: `com.schedkiwi.schedulertelemetry`
+  - Integração com Spring Boot via auto-configuração
+- **Gerenciador Central**: `central-telemetry-api/` (pasta na raiz do projeto)
+  - Comunicação REST com Gerenciador Central existente
 
 # Critérios de Aceite
 - [ ] Biblioteca Maven compilável e testável
