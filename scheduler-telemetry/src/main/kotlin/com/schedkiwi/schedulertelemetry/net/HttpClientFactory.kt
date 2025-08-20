@@ -26,7 +26,7 @@ class HttpClientFactory(
     /**
      * Jackson ObjectMapper configurado para Kotlin e Java Time
      */
-    private val objectMapper = ObjectMapper()
+    val objectMapper = ObjectMapper()
         .registerModule(KotlinModule.Builder().build())
         .registerModule(JavaTimeModule())
     
@@ -37,6 +37,30 @@ class HttpClientFactory(
         .connectTimeout(Duration.ofMillis(connectionTimeoutMs))
         .build()
     
+    /**
+     * Obtém o ObjectMapper configurado
+     */
+    fun getConfiguredObjectMapper(): ObjectMapper = objectMapper
+
+    /**
+     * Obtém o HttpClient configurado
+     */
+    fun getHttpClient(): HttpClient = httpClient
+
+    /**
+     * Serializa um objeto para JSON
+     */
+    fun serializeToJson(obj: Any): String {
+        return objectMapper.writeValueAsString(obj)
+    }
+
+    /**
+     * Deserializa JSON para um objeto do tipo especificado
+     */
+    inline fun <reified T> deserializeFromJson(json: String): T {
+        return objectMapper.readValue(json, objectMapper.typeFactory.constructType(T::class.java))
+    }
+
     /**
      * Envia uma mensagem POST para o endpoint especificado
      */

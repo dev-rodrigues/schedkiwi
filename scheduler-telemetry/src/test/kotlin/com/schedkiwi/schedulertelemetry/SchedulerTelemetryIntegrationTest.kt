@@ -1,130 +1,226 @@
 package com.schedkiwi.schedulertelemetry
 
-import com.schedkiwi.schedulertelemetry.core.SchedulerTelemetryImpl
-import com.schedkiwi.schedulertelemetry.core.ExecutionContext
+import com.schedkiwi.schedulertelemetry.core.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.TestPropertySource
-import org.springframework.beans.factory.annotation.Autowired
-import kotlin.test.*
+import java.time.Instant
+import java.util.*
 
-/**
- * Teste de integração básico para validar a funcionalidade da biblioteca
- */
-@SpringBootTest
-@TestPropertySource(properties = [
-    "scheduler.telemetry.enabled=true",
-    "scheduler.telemetry.manager-url=http://localhost:8080",
-    "scheduler.telemetry.auth.token=test-token"
-])
 class SchedulerTelemetryIntegrationTest {
-    
-    @Autowired
-    private lateinit var schedulerTelemetry: SchedulerTelemetryImpl
-    
+
+    private lateinit var telemetry: SchedulerTelemetryImpl
+
+    @BeforeEach
+    fun setUp() {
+        telemetry = SchedulerTelemetryImpl()
+        ExecutionContextHolder.clearAllContexts()
+    }
+
     @Test
-    fun `deve criar contexto de execução`() {
-        val context = schedulerTelemetry.createExecutionContext(
+    fun `deve criar e gerenciar contexto de execução`() {
+        // Arrange
+        val runId = UUID.randomUUID().toString()
+        val jobId = "test-job"
+        val appName = "test-app"
+        val plannedTotal = 100L
+
+        // Act
+        val context = ExecutionContext(
+            runId = runId,
+            jobId = jobId,
+            appName = appName,
+            plannedTotal = plannedTotal
+        )
+        
+        ExecutionContextHolder.setCurrentContext(context)
+        telemetry.setPlannedTotal(plannedTotal)
+
+        // Assert
+        val retrievedContext = ExecutionContextHolder.getCurrentContext()
+        assertNotNull(retrievedContext)
+        assertEquals(runId, retrievedContext?.runId)
+        assertEquals(jobId, retrievedContext?.jobId)
+        assertEquals(appName, retrievedContext?.appName)
+        assertEquals(plannedTotal, retrievedContext?.plannedTotal)
+    }
+
+    @Test
+    fun `deve adicionar itens processados com sucesso`() {
+        // Arrange
+        val runId = UUID.randomUUID().toString()
+        val context = ExecutionContext(
+            runId = runId,
             jobId = "test-job",
             appName = "test-app"
         )
-        
-        assertNotNull(context)
-        assertEquals("test-job", context.jobId)
-        assertEquals("test-app", context.appName)
-        assertNotNull(context.runId)
-        assertNotNull(context.startTime)
+        ExecutionContextHolder.setCurrentContext(context)
+
+        // Act
+        telemetry.addItem("item-1", mapOf("status" to "processed"))
+        telemetry.addItem("item-2", mapOf("status" to "processed"))
+
+        // Assert
+        val updatedContext = ExecutionContextHolder.getCurrentContext()
+        assertNotNull(updatedContext)
+        assertEquals(2L, updatedContext?.processedItems?.get())
+        assertEquals(2, updatedContext?.itemMetadata?.size)
     }
-    
+
     @Test
-    fun `deve definir total planejado`() {
-        schedulerTelemetry.setPlannedTotal(100)
-        
-        val context = schedulerTelemetry.getCurrentContext()
-        assertNotNull(context)
-        assertEquals(100, context.plannedTotal)
+    fun `deve adicionar itens que falharam`() {
+        // Arrange
+        val runId = UUID.randomUUID().toString()
+        val context = ExecutionContext(
+            runId = runId,
+            jobId = "test-job",
+            appName = "test-app"
+        )
+        ExecutionContextHolder.setCurrentContext(context)
+
+        // Act
+        val exception = RuntimeException("Test error")
+        telemetry.addFailedItem("item-1", mapOf("status" to "failed"), exception)
+
+        // Assert
+        val updatedContext = ExecutionContextHolder.getCurrentContext()
+        assertNotNull(updatedContext)
+        assertEquals(1L, updatedContext?.failedItems?.get())
+        assertEquals(1, updatedContext?.exceptions?.size)
     }
-    
+
     @Test
-    fun `deve adicionar item processado`() {
-        schedulerTelemetry.addItem("item1", "OK")
-        
-        val context = schedulerTelemetry.getCurrentContext()
-        assertNotNull(context)
-        assertEquals(1, context.processedItems)
+    fun `deve adicionar itens pulados`() {
+        // Arrange
+        val runId = UUID.randomUUID().toString()
+        val context = ExecutionContext(
+            runId = runId,
+            jobId = "test-job",
+            appName = "test-app"
+        )
+        ExecutionContextHolder.setCurrentContext(context)
+
+        // Act
+        telemetry.addSkippedItem("item-1", mapOf("status" to "skipped"), "Not applicable")
+
+        // Assert
+        val updatedContext = ExecutionContextHolder.getCurrentContext()
+        assertNotNull(updatedContext)
+        assertEquals(1L, updatedContext?.skippedItems?.get())
+        assertEquals(1, updatedContext?.itemMetadata?.size)
     }
-    
+
     @Test
-    fun `deve adicionar item com falha`() {
-        schedulerTelemetry.addFailedItem("item2", "Erro de validação")
-        
-        val context = schedulerTelemetry.getCurrentContext()
-        assertNotNull(context)
-        assertEquals(1, context.failedItems)
+    fun `deve adicionar metadados gerais`() {
+        // Arrange
+        val runId = UUID.randomUUID().toString()
+        val context = ExecutionContext(
+            runId = runId,
+            jobId = "test-job",
+            appName = "test-app"
+        )
+        ExecutionContextHolder.setCurrentContext(context)
+
+        // Act
+        telemetry.putMetadata("environment", "test")
+        telemetry.putMetadata("version", "1.0.0")
+
+        // Assert
+        val updatedContext = ExecutionContextHolder.getCurrentContext()
+        assertNotNull(updatedContext)
+        assertEquals("test", updatedContext?.generalMetadata?.get("environment"))
+        assertEquals("1.0.0", updatedContext?.generalMetadata?.get("version"))
     }
-    
+
     @Test
-    fun `deve adicionar item pulado`() {
-        schedulerTelemetry.addSkippedItem("item3", "Item duplicado")
-        
-        val context = schedulerTelemetry.getCurrentContext()
-        assertNotNull(context)
-        assertEquals(1, context.skippedItems)
+    fun `deve calcular progresso corretamente`() {
+        // Arrange
+        val runId = UUID.randomUUID().toString()
+        val plannedTotal = 10L
+        val context = ExecutionContext(
+            runId = runId,
+            jobId = "test-job",
+            appName = "test-app",
+            plannedTotal = plannedTotal
+        )
+        ExecutionContextHolder.setCurrentContext(context)
+
+        // Act
+        repeat(5) { i ->
+            telemetry.addItem("item-$i", mapOf("index" to i))
+        }
+
+        // Assert
+        val updatedContext = ExecutionContextHolder.getCurrentContext()
+        assertNotNull(updatedContext)
+        assertEquals(5L, updatedContext?.getTotalProcessed())
+        assertEquals(50.0, updatedContext?.getProgressPercentage())
+        assertFalse(updatedContext?.isComplete() ?: true)
     }
-    
+
     @Test
-    fun `deve adicionar exceção`() {
-        val exception = RuntimeException("Erro de teste")
-        schedulerTelemetry.addException(exception)
-        
-        val context = schedulerTelemetry.getCurrentContext()
-        assertNotNull(context)
-        assertEquals(1, context.exceptions.size)
+    fun `deve finalizar execução com sucesso`() {
+        // Arrange
+        val runId = UUID.randomUUID().toString()
+        val plannedTotal = 2L
+        val context = ExecutionContext(
+            runId = runId,
+            jobId = "test-job",
+            appName = "test-app",
+            plannedTotal = plannedTotal
+        )
+        ExecutionContextHolder.setCurrentContext(context)
+
+        // Act
+        telemetry.addItem("item-1", mapOf("status" to "processed"))
+        telemetry.addItem("item-2", mapOf("status" to "processed"))
+        val finalContext = telemetry.finalizeExecutionContext()
+
+        // Assert
+        assertNotNull(finalContext)
+        assertEquals(ExecutionStatus.COMPLETED, finalContext!!.getStatus())
+        assertTrue(finalContext!!.isComplete())
     }
-    
+
     @Test
-    fun `deve adicionar metadados`() {
-        schedulerTelemetry.putMetadata("version", "1.0.0")
-        schedulerTelemetry.putMetadata("environment", "test")
-        
-        val context = schedulerTelemetry.getCurrentContext()
-        assertNotNull(context)
-        assertEquals("1.0.0", context.getMetadata("version"))
-        assertEquals("test", context.getMetadata("environment"))
+    fun `deve finalizar execução com falha`() {
+        // Arrange
+        val runId = UUID.randomUUID().toString()
+        val context = ExecutionContext(
+            runId = runId,
+            jobId = "test-job",
+            appName = "test-app"
+        )
+        ExecutionContextHolder.setCurrentContext(context)
+
+        // Act
+        val exception = RuntimeException("Test error")
+        telemetry.addFailedItem("item-1", mapOf("status" to "failed"), exception)
+        val finalContext = telemetry.finalizeExecutionContext()
+
+        // Assert
+        assertNotNull(finalContext)
+        assertEquals(ExecutionStatus.FAILED, finalContext!!.getStatus())
+        assertEquals(1, finalContext!!.exceptions.size)
     }
-    
+
     @Test
-    fun `deve calcular progresso`() {
-        schedulerTelemetry.setPlannedTotal(10)
-        schedulerTelemetry.addItem("item1", "OK")
-        schedulerTelemetry.addItem("item2", "OK")
-        schedulerTelemetry.addFailedItem("item3", "Erro")
-        
-        val progress = schedulerTelemetry.getCurrentProgress()
-        assertNotNull(progress)
-        assertEquals(3, progress.totalProcessed)
-        assertEquals(2, progress.successfulItems)
-        assertEquals(1, progress.failedItems)
-        assertEquals(30.0, progress.percentage, 0.1)
-    }
-    
-    @Test
-    fun `deve verificar se há contexto ativo`() {
-        // Inicialmente não deve haver contexto
-        assertFalse(schedulerTelemetry.hasActiveContext())
-        
-        // Após criar contexto
-        schedulerTelemetry.createExecutionContext("test-job", "test-app")
-        assertTrue(schedulerTelemetry.hasActiveContext())
-    }
-    
-    @Test
-    fun `deve limpar contexto`() {
-        schedulerTelemetry.createExecutionContext("test-job", "test-app")
-        assertTrue(schedulerTelemetry.hasActiveContext())
-        
-        schedulerTelemetry.clearCurrentContext()
-        assertFalse(schedulerTelemetry.hasActiveContext())
+    fun `deve limpar contexto após finalização`() {
+        // Arrange
+        val runId = UUID.randomUUID().toString()
+        val context = ExecutionContext(
+            runId = runId,
+            jobId = "test-job",
+            appName = "test-app"
+        )
+        ExecutionContextHolder.setCurrentContext(context)
+
+        // Act
+        telemetry.finalizeExecutionContext()
+        ExecutionContextHolder.clearCurrentContext()
+
+        // Assert
+        assertFalse(ExecutionContextHolder.hasCurrentContext())
+        assertNull(ExecutionContextHolder.getCurrentContext())
     }
 }

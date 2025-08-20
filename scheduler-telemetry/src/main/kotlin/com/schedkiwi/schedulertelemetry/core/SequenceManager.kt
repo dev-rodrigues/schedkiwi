@@ -73,6 +73,54 @@ class SequenceManager(
     }
     
     /**
+     * Armazena uma mensagem no buffer circular
+     */
+    fun storeMessage(runId: String, message: String) {
+        val sequencedMessage = SequencedMessage(
+            runId = runId,
+            sequenceNumber = getNextSequenceNumber(runId),
+            timestamp = Instant.now(),
+            messageType = "TEST",
+            payload = message,
+            checksum = calculateChecksum(message)
+        )
+        addMessageToBuffer(runId, sequencedMessage)
+    }
+
+    /**
+     * Obtém uma mensagem do buffer por runId e sequência
+     */
+    fun getMessage(runId: String, sequenceNumber: Long): String? {
+        val buffer = messageBuffers[runId] ?: return null
+        return buffer.getAll()
+            .find { it.sequenceNumber == sequenceNumber }
+            ?.payload
+    }
+
+    /**
+     * Obtém estatísticas gerais de todos os runIds
+     */
+    fun getStats(): GeneralStats {
+        val totalRunIds = sequenceCounters.size
+        val totalMessages = sequenceCounters.values.sumOf { it.get() }
+        val averageMessagesPerRunId = if (totalRunIds > 0) totalMessages.toDouble() / totalRunIds else 0.0
+
+        return GeneralStats(
+            totalRunIds = totalRunIds,
+            totalMessages = totalMessages,
+            averageMessagesPerRunId = averageMessagesPerRunId
+        )
+    }
+
+    /**
+     * Limpa todas as estatísticas
+     */
+    fun clearStats() {
+        sequenceCounters.clear()
+        messageBuffers.clear()
+    }
+    
+    /**
      * Calcula o checksum SHA-256 de um payload
      */
     fun calculateChecksum(payload: String): String {
@@ -161,6 +209,15 @@ data class SequenceStats(
     val bufferSize: Int,
     val bufferCapacity: Int,
     val outOfOrderToleranceMs: Long
+)
+
+/**
+ * Estatísticas gerais de todos os runIds
+ */
+data class GeneralStats(
+    val totalRunIds: Int,
+    val totalMessages: Long,
+    val averageMessagesPerRunId: Double
 )
 
 /**
