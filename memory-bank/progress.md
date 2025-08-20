@@ -34,7 +34,7 @@ Sistema de monitoramento em tempo real de execuções de schedulers com:
   - ✅ Testes unitários completos
   - ✅ Documentação técnica
 
-### **2. API Central `central-telemetry-api/`** 🔄 **85% Concluído**
+### **2. API Central `central-telemetry-api/`** 🔄 **95% Concluído**
 - **Status**: 🔄 Em desenvolvimento ativo
 - **Localização**: Pasta `central-telemetry-api/` na raiz do projeto
 - **Funcionalidades Implementadas**:
@@ -48,7 +48,7 @@ Sistema de monitoramento em tempo real de execuções de schedulers com:
   - ✅ Sistema de autenticação completo
   - ✅ DTOs para frontend
   - ✅ Controllers do frontend (Grupo 2)
-  - 🔄 Sistema HATEOAS
+  - ✅ Sistema HATEOAS
   - 🔄 Testes e validação
 
 ## 🚀 **Milestones Alcançados**
@@ -82,10 +82,14 @@ Sistema de monitoramento em tempo real de execuções de schedulers com:
   - FrontendQueryService para agregação de dados
   - Estrutura completa para HATEOAS
 
-### **Milestone 5: Sistema HATEOAS** 📋
-- **Prazo**: Próximo
+### **Milestone 5: Sistema HATEOAS** ✅
+- **Data**: 2024-12-19
 - **Descrição**: Implementação do sistema HATEOAS para navegação fluida
-- **Critérios**: Links de navegação automáticos em todas as respostas
+- **Artefatos**: 
+  - HateoasService com geração automática de links
+  - FrontendController atualizado com EntityModel e PagedModel
+  - Navegação fluida entre todas as entidades
+  - Links automáticos para aplicações, execuções, jobs e métricas
 
 ### **Milestone 6: Testes e Validação** 📋
 - **Prazo**: Futuro
@@ -99,16 +103,16 @@ Sistema de monitoramento em tempo real de execuções de schedulers com:
 
 ## 📋 **Tarefas Ativas**
 
-### **Tarefa Atual: Sistema HATEOAS**
+### **Tarefa Atual: Testes e Validação**
 - **Status**: 🔄 Em progresso
-- **Descrição**: Implementação do sistema HATEOAS para navegação fluida
-- **Arquivos**: Controllers e DTOs com links de navegação
-- **Próximo**: Testes unitários e validação arquitetural
-
-### **Próxima Tarefa: Testes e Validação**
-- **Status**: 📋 Planejada
 - **Descrição**: Implementação de testes unitários para todas as camadas
 - **Arquivos**: Testes para domain, application e infrastructure layers
+- **Próximo**: Validação arquitetural e integração end-to-end
+
+### **Próxima Tarefa: Validação Arquitetural**
+- **Status**: 📋 Planejada
+- **Descrição**: Validação da separação de responsabilidades e arquitetura hexagonal
+- **Arquivos**: Análise de dependências e validação de camadas
 
 ## 🧪 **Testes e Qualidade**
 
