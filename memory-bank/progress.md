@@ -34,7 +34,7 @@ Sistema de monitoramento em tempo real de execuções de schedulers com:
   - ✅ Testes unitários completos
   - ✅ Documentação técnica
 
-### **2. API Central `central-telemetry-api/`** 🔄 **95% Concluído**
+### **2. API Central `central-telemetry-api/`** 🔄 **97% Concluído**
 - **Status**: 🔄 Em desenvolvimento ativo
 - **Localização**: Pasta `central-telemetry-api/` na raiz do projeto
 - **Funcionalidades Implementadas**:
@@ -49,7 +49,9 @@ Sistema de monitoramento em tempo real de execuções de schedulers com:
   - ✅ DTOs para frontend
   - ✅ Controllers do frontend (Grupo 2)
   - ✅ Sistema HATEOAS
-  - 🔄 Testes e validação
+  - ✅ Testes de unidade (camada de domínio)
+  - ✅ Testes para Value Objects
+  - 🔄 Testes de aplicação e infraestrutura
 
 ## 🚀 **Milestones Alcançados**
 
@@ -103,11 +105,13 @@ Sistema de monitoramento em tempo real de execuções de schedulers com:
 
 ## 📋 **Tarefas Ativas**
 
-### **Tarefa Atual: Testes e Validação**
+### **Tarefa Atual: Testes de Aplicação e Infraestrutura**
 - **Status**: 🔄 Em progresso
-- **Descrição**: Implementação de testes unitários para todas as camadas
-- **Arquivos**: Testes para domain, application e infrastructure layers
-- **Próximo**: Validação arquitetural e integração end-to-end
+- **Descrição**: Implementação de testes para camadas de aplicação e infraestrutura
+- **Arquivos**: Testes para services, controllers, repositories
+- **Completado**: ✅ Testes de domínio (Application, Execution, ScheduledJob, ApplicationToken)
+- **Completado**: ✅ Testes de Value Objects (TokenValidationResult, ItemMetadata)
+- **Próximo**: Testes de serviços de aplicação e controllers
 
 ### **Próxima Tarefa: Validação Arquitetural**
 - **Status**: 📋 Planejada

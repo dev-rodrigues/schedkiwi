@@ -23,7 +23,7 @@ import java.util.*
 @RestController
 @RequestMapping("/api")
 @Tag(name = "Frontend", description = "Endpoints para consulta de dados pelo frontend")
-class FrontendController(
+open class FrontendController(
     private val frontendQueryService: FrontendQueryService,
     private val hateoasService: HateoasService
 ) {
