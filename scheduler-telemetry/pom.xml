@@ -12,6 +12,32 @@
 
     <name>Scheduler Telemetry Library</name>
     <description>Biblioteca Maven em Kotlin para instrumentação de schedulers via AOP com telemetria e progresso em tempo real</description>
+    
+    <url>https://github.com/dev-rodrigues/schedkiwi</url>
+    <inceptionYear>2024</inceptionYear>
+    
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    
+    <developers>
+        <developer>
+            <name>Carlos Henrique Rodrigues</name>
+            <email>carlos.henrique.rodrigues@gmail.com</email>
+            <organization>SchedKiwi</organization>
+            <organizationUrl>https://github.com/dev-rodrigues</organizationUrl>
+        </developer>
+    </developers>
+    
+    <scm>
+        <connection>scm:git:git://github.com/dev-rodrigues/schedkiwi.git</connection>
+        <developerConnection>scm:git:ssh://github.com:dev-rodrigues/schedkiwi.git</developerConnection>
+        <url>https://github.com/dev-rodrigues/schedkiwi/tree/master</url>
+    </scm>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -23,6 +49,7 @@
         <junit.version>5.10.1</junit.version>
         <mockk.version>1.13.8</mockk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
     <dependencyManagement>
@@ -262,11 +289,13 @@
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+            <name>Sonatype OSSRH Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
             <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/releases</url>
+            <name>Sonatype OSSRH Releases</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
 </project>
